@@ -1,54 +1,71 @@
 package main
+
 import (
 	"fmt"
 )
- 
+
 type Student struct {
-	ID int
-	Name string
+	ID      int
+	Name    string
+	Surname string
 }
 
 func main() {
 	fmt.Println(
-	`+-------------------------------+
+		`+-------------------------------+
 	|                        		 |
 	| Система контроля за студентами |
 	|                                |
 	+--------------------------------+`,
-)
+	)
 	students := make(map[int]Student)
 
-	// var command string;
-	
-	// switch command {
-	// case "del": RemoveStudent()
-	// case "add": AddStudent()
-	// case "check": PrintStudents()
-	// }
-	// fmt.Println("Выберите действие: del/add/check")
-	// fmt.Scan(&command)
+	var command string
 
-    AddStudent(students, Student{ID: 1, Name: "Володя"})
+	fmt.Println("Выберите действие: del/add/check")
+	_, err := fmt.Scan(&command)
 
-    fmt.Println("Список студентов:")
-    PrintStudents(students)
-	fmt.Println()
+	if err != nil {
+		fmt.Println("Произошла ошибка: ", err)
+		return
+	}
 
-    RemoveStudent(students, 2)
+	switch command {
+	case "del":
+		RemoveStudent(students)
+	case "add":
+		AddStudent(students)
+	case "check":
+		PrintStudents(students)
 
-    fmt.Println("Обновленный список студентов:")
-    PrintStudents(students)
+	default:
+		fmt.Println("Неверная команда, попробуйте еще раз.")
+	}
+
 }
 
+func AddStudent(students map[int]Student) {
+	var name, surname string
+	var ID int
 
-func AddStudent(students map[int]Student, newStudent Student) {
-    students[newStudent.ID] = newStudent
+	fmt.Println("Пожалуйста, укажите ID, Имя, Фамилию студента:")
+	_, err := fmt.Scanf("%d %s %s", &ID, &name, &surname)
+
+	if err != nil {
+		fmt.Println("Произошла ошибка: ", err)
+		return
+	} else if err == nil {
+		fmt.Printf("Студент %s %s успешно добавлен в базу.\n", name, surname)
+	}
+
+	newStudent := Student{ID: ID, Name: name, Surname: surname}
+	students[newStudent.ID] = newStudent
 }
 
-func RemoveStudent(students map[int]Student, ID int) {
-	delete(students, ID)
+func RemoveStudent(students map[int]Student) {
+	// delete(students, ID)
 }
-  
+
 func PrintStudents(students map[int]Student) {
 	for id, student := range students {
 		fmt.Printf("ID: %d, Имя: %s\n", id, student.Name)
