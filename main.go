@@ -10,51 +10,51 @@ type Student struct {
 	Surname string
 }
 
+var name, surname string
+var ID int
+
 func main() {
 	fmt.Println(
 		`+-------------------------------+
 	|                        		 |
-	| Система контроля за студентами |
+	| Система управления студентами  |
 	|                                |
 	+--------------------------------+`,
 	)
 	students := make(map[int]Student)
-
+	//students[1] = Student{ID: 1, Name: "Andrey", Surname: "Vorobyev"}
 	var command string
-
 	fmt.Println("Выберите действие: del/add/check")
-	_, err := fmt.Scan(&command)
+	for {
+		_, err := fmt.Scan(&command)
 
-	if err != nil {
-		fmt.Println("Произошла ошибка: ", err)
-		return
+		if err != nil {
+			fmt.Println("Произошла ошибка: ", err)
+			return
+		}
+
+		switch command {
+		case "del":
+			RemoveStudent(students)
+		case "add":
+			AddStudent(students)
+		case "check":
+			PrintStudents(students)
+
+		default:
+			fmt.Println("Неверная команда, попробуйте еще раз.")
+		}
 	}
-
-	switch command {
-	case "del":
-		RemoveStudent(students)
-	case "add":
-		AddStudent(students)
-	case "check":
-		PrintStudents(students)
-
-	default:
-		fmt.Println("Неверная команда, попробуйте еще раз.")
-	}
-
 }
 
 func AddStudent(students map[int]Student) {
-	var name, surname string
-	var ID int
-
 	fmt.Println("Пожалуйста, укажите ID, Имя, Фамилию студента:")
 	_, err := fmt.Scanf("%d %s %s", &ID, &name, &surname)
 
 	if err != nil {
 		fmt.Println("Произошла ошибка: ", err)
 		return
-	} else if err == nil {
+	} else {
 		fmt.Printf("Студент %s %s успешно добавлен в базу.\n", name, surname)
 	}
 
@@ -63,11 +63,24 @@ func AddStudent(students map[int]Student) {
 }
 
 func RemoveStudent(students map[int]Student) {
-	// delete(students, ID)
+	fmt.Println("Пожалуйста, укажите ID студента:")
+	_, err := fmt.Scanf("%d", &ID)
+
+	if err != nil {
+		fmt.Println("Произошла ошибка: ", err)
+	} else {
+		fmt.Printf("Студент %s %s успешно удален из базы.\n", name, surname)
+	}
+
+	delete(students, ID)
 }
 
 func PrintStudents(students map[int]Student) {
+	if len(students) == 0 {
+		fmt.Println("Список студентов пуст.")
+	}
+
 	for id, student := range students {
-		fmt.Printf("ID: %d, Имя: %s\n", id, student.Name)
+		fmt.Printf("ID: %d, Имя: %s, Фамилия: %s\n", id, student.Name, student.Surname)
 	}
 }
