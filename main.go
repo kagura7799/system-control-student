@@ -22,7 +22,7 @@ func main() {
 	+--------------------------------+`,
 	)
 	students := make(map[int]Student)
-	//students[1] = Student{ID: 1, Name: "Andrey", Surname: "Vorobyev"}
+
 	var command string
 	fmt.Println("Выберите действие: del/add/check")
 	for {
@@ -69,7 +69,7 @@ func RemoveStudent(students map[int]Student) {
 	if err != nil {
 		fmt.Println("Произошла ошибка: ", err)
 	} else {
-		fmt.Printf("Студент %s %s успешно удален из базы.\n", name, surname)
+		fmt.Printf("Студент %s %s успешно удален из базы.\n", students[ID].Name, students[ID].Surname)
 	}
 
 	delete(students, ID)
