@@ -10,8 +10,10 @@ type Student struct {
 	Surname string
 }
 
-var name, surname string
-var ID int
+var (
+	name, surname string
+	ID            int
+)
 
 func main() {
 	fmt.Println(
@@ -35,9 +37,9 @@ func main() {
 
 		switch command {
 		case "del":
-			RemoveStudent(students)
+			RemoveStudents(students)
 		case "add":
-			AddStudent(students)
+			AddStudents(students)
 		case "check":
 			PrintStudents(students)
 
@@ -47,7 +49,7 @@ func main() {
 	}
 }
 
-func AddStudent(students map[int]Student) {
+func AddStudents(students map[int]Student) {
 	fmt.Println("Пожалуйста, укажите ID, Имя, Фамилию студента:")
 	_, err := fmt.Scanf("%d %s %s", &ID, &name, &surname)
 
@@ -62,25 +64,29 @@ func AddStudent(students map[int]Student) {
 	students[newStudent.ID] = newStudent
 }
 
-func RemoveStudent(students map[int]Student) {
-	fmt.Println("Пожалуйста, укажите ID студента:")
-	_, err := fmt.Scanf("%d", &ID)
+func RemoveStudents(students map[int]Student) {
+	if len(students) != 0 {
+		fmt.Println("Пожалуйста, укажите ID студента:")
+		_, err := fmt.Scanf("%d", &ID)
 
-	if err != nil {
-		fmt.Println("Произошла ошибка: ", err)
+		if err != nil {
+			fmt.Println("Произошла ошибка: ", err)
+		} else {
+			fmt.Printf("Студент %s %s успешно удален из базы.\n", students[ID].Name, students[ID].Surname)
+		}
+
+		delete(students, ID)
 	} else {
-		fmt.Printf("Студент %s %s успешно удален из базы.\n", students[ID].Name, students[ID].Surname)
+		fmt.Println("Список студентов пуст.")
 	}
-
-	delete(students, ID)
 }
 
 func PrintStudents(students map[int]Student) {
-	if len(students) == 0 {
+	if len(students) != 0 {
+		for id, student := range students {
+			fmt.Printf("ID: %d, Имя: %s, Фамилия: %s\n", id, student.Name, student.Surname)
+		}
+	} else {
 		fmt.Println("Список студентов пуст.")
-	}
-
-	for id, student := range students {
-		fmt.Printf("ID: %d, Имя: %s, Фамилия: %s\n", id, student.Name, student.Surname)
 	}
 }
