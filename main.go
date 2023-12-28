@@ -5,14 +5,15 @@ import (
 )
 
 type Student struct {
-	ID      int
-	Name    string
-	Surname string
+	ID         int
+	Name       string
+	Surname    string
+	Patronymic string
 }
 
 var (
-	name, surname, command string
-	ID                     int
+	name, surname, patronymic, command string
+	ID                                 int
 )
 
 func main() {
@@ -25,11 +26,11 @@ func main() {
 	)
 	students := make(map[int]Student)
 
-	students[1] = Student{ID: 1, Name: "Максим", Surname: "Котельников"}
-	students[2] = Student{ID: 2, Name: "Александр", Surname: "Воронов"}
-	students[3] = Student{ID: 3, Name: "Борис", Surname: "Аристов"}
-	students[4] = Student{ID: 4, Name: "Федор", Surname: "Астафьев"}
-	students[5] = Student{ID: 5, Name: "Настя", Surname: "Шмыкова"}
+	students[1] = Student{ID: 1, Name: "Максим", Surname: "Котельников", Patronymic: "Викторович"}
+	students[2] = Student{ID: 2, Name: "Александр", Surname: "Воронов", Patronymic: "Андреевич"}
+	students[3] = Student{ID: 3, Name: "Борис", Surname: "Аристов", Patronymic: "Петрович"}
+	students[4] = Student{ID: 4, Name: "Федор", Surname: "Астафьев", Patronymic: "Максимович"}
+	students[5] = Student{ID: 5, Name: "Настя", Surname: "Шмыкова", Patronymic: "Игорьевна"}
 
 	fmt.Println("Выберите действие: del/add/print/find")
 	for {
@@ -58,17 +59,17 @@ func main() {
 }
 
 func AddStudents(students map[int]Student) {
-	fmt.Println("Пожалуйста, укажите ID, Имя, Фамилию студента:")
-	_, err := fmt.Scanf("%d %s %s", &ID, &name, &surname)
+	fmt.Println("Пожалуйста, укажите ID, ФИО студента:")
+	_, err := fmt.Scanf("%d %s %s %s", &ID, &surname, &name, &patronymic)
 
 	if err != nil {
 		fmt.Println("Произошла ошибка: ", err)
 		return
 	}
 
-	fmt.Printf("Студент %s %s успешно добавлен в базу.\n", name, surname)
+	fmt.Printf("Студент %s %s %s успешно добавлен в базу.\n", surname, name, patronymic)
 
-	newStudent := Student{ID: ID, Name: name, Surname: surname}
+	newStudent := Student{ID: ID, Name: name, Surname: surname, Patronymic: patronymic}
 	students[newStudent.ID] = newStudent
 }
 
@@ -78,7 +79,7 @@ func RemoveStudents(students map[int]Student) {
 	} else {
 		fmt.Println("Пожалуйста, укажите ID студента:")
 
-		_, err := fmt.Scanf("%d", &ID)
+		_, err := fmt.Scan(&ID)
 
 		studentFound := false
 		for _, val := range students {
@@ -91,16 +92,14 @@ func RemoveStudents(students map[int]Student) {
 		if !studentFound {
 			fmt.Printf("Студента с ID %d не существует.\n", ID)
 		} else {
-			fmt.Printf("Студент %s %s успешно удален из базы.\n", students[ID].Name, students[ID].Surname)
+			fmt.Printf("Студент %s %s %s успешно удален из базы.\n", students[ID].Surname, students[ID].Name, students[ID].Patronymic)
 			delete(students, ID)
 		}
 
 		if err != nil {
 			fmt.Println("Произошла ошибка: ", err)
 		}
-
 	}
-
 }
 
 func FindStudents(students map[int]Student) {
@@ -118,7 +117,7 @@ func FindStudents(students map[int]Student) {
 	studentFound := false
 	for _, val := range students {
 		if ID == val.ID {
-			fmt.Printf("Студент под ID %d: %s %s\n", val.ID, val.Name, val.Surname)
+			fmt.Printf("Студент под ID %d: %s %s %s\n", val.ID, val.Surname, val.Name, val.Patronymic)
 			studentFound = true
 			break
 		}
@@ -135,7 +134,7 @@ func PrintStudents(students map[int]Student) {
 	}
 
 	for id, student := range students {
-		fmt.Printf("ID: %d, %s %s\n", id, student.Name, student.Surname)
+		fmt.Printf("ID: %d, %s %s %s\n", id, student.Surname, student.Name, student.Patronymic)
 	}
 
 }
