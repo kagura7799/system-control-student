@@ -73,20 +73,32 @@ func AddStudents(students map[int]Student) {
 }
 
 func RemoveStudents(students map[int]Student) {
-	if len(students) != 0 {
+	if len(students) == 0 {
+		fmt.Println("Список студентов пуст.")
+	} else {
 		fmt.Println("Пожалуйста, укажите ID студента:")
 
 		_, err := fmt.Scanf("%d", &ID)
+
+		studentFound := false
+		for _, val := range students {
+			if ID == val.ID {
+				studentFound = true
+				break
+			}
+		}
+
+		if !studentFound {
+			fmt.Printf("Студента с ID %d не существует.\n", ID)
+		} else {
+			fmt.Printf("Студент %s %s успешно удален из базы.\n", students[ID].Name, students[ID].Surname)
+			delete(students, ID)
+		}
 
 		if err != nil {
 			fmt.Println("Произошла ошибка: ", err)
 		}
 
-		fmt.Printf("Студент %s %s успешно удален из базы.\n", students[ID].Name, students[ID].Surname)
-
-		delete(students, ID)
-	} else {
-		fmt.Println("Список студентов пуст.")
 	}
 
 }
